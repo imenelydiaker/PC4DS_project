@@ -9,14 +9,12 @@
 ## simulate size of claims per year
 inv.f <- function(y, alpha, beta) ((beta / (1 - y) ^ (1 / alpha)) - beta)
 
-simu.X <- function(n_samples) {
-  alpha = 3
-  beta = 100000
+simu.X <- function(n_samples, alpha, beta) {
   y = runif(n_samples, 0, 1)
   inv.f(y, alpha, beta)
 }
 
-X = simu.X(n_samples = 1000)
+X = simu.X(n_samples = 1000, alpha = 3, beta = 1e5)
 print(X)
 
 plot(density(X))
@@ -54,15 +52,15 @@ hist(pareto)
 
 ## assets at the end of 5 years
 z <- function(t) {
-  premiums = 5500000; z_array = c(1000000); go.bust <- FALSE
+  premiums <- 5500000; z_array <- c(1000000); go.bust <- FALSE
   for (i in 1:t) { # i : annee precedente car les tableaux en R commencent a 1 et z_array est deja initialise a z_0
-    claims = simu.X(n_samples = 100)
+    claims <- simu.X(n_samples = 100, alpha = 3, beta = 1e5)
     if (z_array[i] > 0)
-      z_t = max(z_array[i] + premiums - sum(claims), 0)
+      z_t <- max(z_array[i] + premiums - sum(claims), 0)
     else{
       go.bust <- TRUE
-      z_array = append(z_array, rep(0, 6 - i))
-      break# when the company goes bust it stays there so we abort the loop
+      z_array <- append(z_array, rep(0, 6 - i))
+      break # when the company goes bust it stays there so we abort the loop
     }
     z_array = append(z_array, z_t)
   }
@@ -109,8 +107,7 @@ z.profit <- function(t) {
     else{
       go.bust <- TRUE
       z_array <- append(z_array, rep(0, 6 - i))
-      break
-      # when the company goes bust it stays there so we abort the loop
+      break # when the company goes bust it stays there so we abort the loop
     }
     if (z_t > 1e6){
       print(z_t)
@@ -154,22 +151,22 @@ profits
 
 ## This function is equivalent to both z() and z.profit()
 z.optimized <- function(t, profit = FALSE) {
-  premiums = 5500000; z_array = c(1000000); go.bust <- FALSE; profits <- 0
+  premiums <- 5500000; z_array <- c(1000000); go.bust <- FALSE; profits <- 0
   for (i in 1:t) { 
-    claims = simu.X(n_samples = 100)
+    claims <- simu.X(n_samples = 100)
     if (z_array[i] > 0)
-      z_t = max(z_array[i] + premiums - sum(claims), 0)
+      z_t <- max(z_array[i] + premiums - sum(claims), 0)
     else{
       go.bust <- TRUE
-      z_array = append(z_array, rep(0, 6 - i))
+      z_array <- append(z_array, rep(0, 6 - i))
       break # abort loop
     }
-    if (profit == TRUE && z_t > 1e6){
-      z_array = append(z_array, z_t - 1e6)
+    if ((profit == TRUE) && (z_t > 1e6)){
+      z_array <- append(z_array, z_t - 1e6)
       profits <- profits + 1e6
-      }
+    }
     else
-      z_array = append(z_array, z_t)
+      z_array <- append(z_array, z_t)
   }
   list(go.bust, profits, z_array)
 }
