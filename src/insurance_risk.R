@@ -38,7 +38,6 @@ hist(pareto)
 # recursive version : not completed
 # z <- function(t){
 #   premiums = 5500000; claims = list()
-#   print(t)
 #   if(t == 0){
 #     return(1000000)
 #   }
@@ -151,8 +150,9 @@ plot(0:5, assets[[3]], type = "l", xlab = 'years', ylab = 'assets')
 profits <- assets[[2]]
 profits
 
-## Code optimization ####
+## Code optimized ####
 
+## This function is equivalent to both z() and z.profit()
 z.optimized <- function(t, profit = FALSE) {
   premiums = 5500000; z_array = c(1000000); go.bust <- FALSE; profits <- 0
   for (i in 1:t) { 
