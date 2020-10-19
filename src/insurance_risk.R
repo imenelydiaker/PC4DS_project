@@ -78,15 +78,16 @@ for(i in seq(20)){
   par(new = TRUE)
   asset <- z(5, TRUE)
   assets <- append(assets, asset)
-  plot(0:5, asset[[2]], type = 'l', xlab = 'years', ylab = 'assets')
+  plot(0:5, asset[[3]], type = 'l', xlab = 'years', ylab = 'assets')
 }
 # print(assets)
+
 
 ## Estimate the probability of the company to go bust
 bust.proba <- function(assets){
   count = 0
   for(i in 1:length(assets)){
-    if(i %% 2 == 1 && assets[[i]] == TRUE){
+    if((i %% 2 == 1) && (i %% 3 != 0) && (assets[[i]] == TRUE)){
       count = count + 1
     }
   }
@@ -101,7 +102,7 @@ print(paste("Probability of going bust :", bust.proba(assets = assets)))
 z.profit <- function(t) {
   premiums <- 5500000; z_array <- c(1000000); go.bust <- FALSE; profits <- 0
   for (i in 1:t) { # i : annee precedente car les tableaux en R commencent a 1 et z_array est deja initialise a z_0
-    claims <- simu.X(n_samples = 100)
+    claims <- simu.X(n_samples = 100, alpha = 3, beta = 1e5)
     if (z_array[i] > 0)
       z_t <- max(z_array[i] + premiums - sum(claims), 0)
     else{
@@ -110,7 +111,6 @@ z.profit <- function(t) {
       break # when the company goes bust it stays there so we abort the loop
     }
     if (z_t > 1e6){
-      print(z_t)
       z_array <- append(z_array, z_t - 1e6)
       profits <- profits + 1e6
     }
@@ -131,8 +131,7 @@ for(i in seq(20)){
   par(new = TRUE)
   asset <- z.profit(5)
   assets <- append(assets, asset)
-  print(asset[[2]])
-  plot(0:5, asset[[2]], type = 'line', xlab = 'years', ylab = 'assets')
+  plot(0:5, asset[[3]], type = 'line', xlab = 'years', ylab = 'assets')
 }
 # print(assets)
 
@@ -153,7 +152,7 @@ profits
 z.optimized <- function(t, profit = FALSE) {
   premiums <- 5500000; z_array <- c(1000000); go.bust <- FALSE; profits <- 0
   for (i in 1:t) { 
-    claims <- simu.X(n_samples = 100)
+    claims <- simu.X(n_samples = 100, alpha = 3, beta = 1e5)
     if (z_array[i] > 0)
       z_t <- max(z_array[i] + premiums - sum(claims), 0)
     else{
