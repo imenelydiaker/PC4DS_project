@@ -1,3 +1,7 @@
+## File : test.R
+## Description : * tests methods of insuranceRisk package
+##              * answers question of Chap 22 Students projects section 22.4 Insurance risk
+
 library(insuranceRisk)
 
 ## Part 1 ####
