@@ -11,5 +11,5 @@ z <- function(t) {
     }
     z_array = append(z_array, z_t)
   }
-  list(go.bust, z_array)
+  list(go.bust = go.bust, assets = z_array)
 }

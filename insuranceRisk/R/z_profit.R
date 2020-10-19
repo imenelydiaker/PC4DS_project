@@ -16,5 +16,5 @@ z_profit <- function(t) {
     else
       z_array <- append(z_array, z_t)
   }
-  list(go.bust, profits, z_array)
+  list(go.bust = go.bust, profits = profits, assets = z_array)
 }
