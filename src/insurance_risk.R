@@ -176,7 +176,4 @@ plot(0:5, resultat[[3]], type = "l", xlab = 'years', ylab = 'assets')
 
 print(paste("Probability of going bust :", bust.proba(assets = resultat[[3]])))
 
-# library(Rcpp)
-# install.packages("Rcpp")
-
 
