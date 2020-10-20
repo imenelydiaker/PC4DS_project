@@ -1,13 +1,12 @@
-Package: insuranceRisk
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Package: pckgInsuranceRisk
+Title: Measure Insurance Risk
+Version: 1.0
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Imene",
+           family = "Kerboua",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "imene.kerboua@univ-lyon2.fr")
+Description: This package helps insurance companies to calculate the probability that they go bust and estimate how much money they will make
 Depends: R (>= 4.0)
 License: ULL2
 Encoding: UTF-8
