@@ -3,7 +3,7 @@
 ## Constantes ####
 # Nombre d'observations
 n <- 1000000
-# La valeur de la borne sup?rieure
+# La valeur de la borne supérieure
 a <- 20
 
 
@@ -14,12 +14,12 @@ ds <- r_dist_sim(f_rexp(n), n, a)
 
 ## Affichage des graphes CAS I ####
 
-# Affichage de graphes c?te ? c?te
+# Affichage de graphes côte à côte
 par(las = 1,
     mfrow = c(1, 2),
     mar = c(4, 5, 3, 2))
 
-# Affichage de la densit? de R et T sur la figure gauche
+# Affichage de la densité de R et T sur la figure gauche
 curve(
   d_gamma(x),
   from = 0,
@@ -32,7 +32,7 @@ curve(
 curve(d_exp(x), add = TRUE)
 abline(h = 0, col = "grey")
 
-## affichage de la densit? estim?e de S et R sur la figure droite
+## affichage de la densité estimée de S et R sur la figure droite
 draw_hist(ds,
           title = "S" ,
           seq_by = 0.5,
@@ -50,12 +50,12 @@ ds <- r_dist_sim(f_rlnorm(n), n, a)
 ds <- r_dist_sim(f_rweibull(n), n, a)
 
 ## Affichage des graphes des cas II et cas III ####
-# Affichage c?te ? c?te
+# Affichage côte à côte
 par(las = 1,
     mfrow = c(1, 2),
     mar = c(4, 5, 3, 2))
 
-# Affichage de lhistogramme de S et les densit?s de T et R sur le graphe ? gauche
+# Affichage de l'histogramme de S et les densités de T et R sur le graphe à gauche
 draw_hist(ds,
           title = "Lognormal",
           seq_by = 0.125 ,
@@ -65,7 +65,7 @@ curve(dlnorm(x, meanlog = 0.5, sdlog = 0.55),
       lty = 2)
 curve(dlnorm(x, meanlog = 0.8025, sdlog = 0.55), add = TRUE)
 
-# Affichage de l'histogramme de S et les densit?s de T et R sur le graphe ? gauche
+# Affichage de l'histogramme de S et les densités de T et R sur le graphe à gauche
 draw_hist(ds,
           title = "Weibull",
           seq_by = 0.125,
