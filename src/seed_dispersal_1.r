@@ -2,13 +2,13 @@
 ## Description:Seed Dispersal
 ## Description:Simulating the radial distance R
 ## By 
-## Fonction de simulation de densité de la distance R par méthode de rejet ####
+## Fonction de simulation de densitÃ© de la distance R par mÃ©thode de rejet ####
 # Input
-#   f : Fonction de densité
+#   f : Fonction de densitÃ©
 #   n : Nombre d'observations
-#   a : Borne supérieure de f
+#   a : Borne supÃ©rieure de f
 # Output
-#   r : Densité estimée
+#   r : DensitÃ© estimÃ©e
 r_dist_sim <- function(f, n, a) {
   du <- runif(n, min = 0, max = a)
   dt <- f
@@ -30,7 +30,7 @@ f_rlnorm <- function(n)
 f_rweibull <- function(n)
   rweibull(n = n, shape = 2, scale = 2)
 
-## Fonction de Distribution Chi-2 avec 3 degrés de liberté
+## Fonction de Distribution Chi-2 avec 3 degrÃ©s de libertÃ©
 f_Chi2 <-
   function(x)
     (1 / (2 * sqrt(pi))) * x ^ 2 * exp(-(x ^ 2) / 4)
@@ -55,15 +55,15 @@ draw_hist <- function(S, title, seq_by, xlim_max) {
 ## Constantes ####
 # Nombre d'observations
 n <- 1000000
-# La valeur de la borne supérieure
+# La valeur de la borne supÃ©rieure
 a <- 20
 ## CAS I : T~exp; R~gamma  ####
 
-# T = dt : Densité exponentielle
+# T = dt : DensitÃ© exponentielle
 dt <- function(x)
   dexp(x, rate = 1 / 2)
 
-# R = dr : Densité gamma
+# R = dr : DensitÃ© gamma
 dr <- function(x)
   dgamma(x, shape = 2, rate = 1 / 2)
 
@@ -72,12 +72,12 @@ ds <- r_dist_sim(f_rexp(n), n, a)
 
 ## Affichage des graphes CAS I ####
 
-# Affichage de graphes côte à côte
+# Affichage de graphes cÃ´te Ã  cÃ´te
 par(las = 1,
     mfrow = c(1, 2),
     mar = c(4, 5, 3, 2))
 
-# Affichage de la densité de R et T sur la figure gauche
+# Affichage de la densitÃ© de R et T sur la figure gauche
 curve(
   dr(x),
   from = 0,
@@ -90,7 +90,7 @@ curve(
 curve(dt(x), add = TRUE)
 abline(h = 0, col = "grey")
 
-## affichage de la densité estimée de S et R sur la figure droite
+## affichage de la densitÃ© estimÃ©e de S et R sur la figure droite
 draw_hist(ds,
           title = "S" ,
           seq_by = 0.5,
@@ -102,18 +102,18 @@ curve(dr(x), add = TRUE)
 # Estimation de S
 ds <- r_dist_sim(f_rlnorm(n), n, a)
 
-## CAS II : T~Weibull; R~Chi-2 ####
+## CAS III : T~Weibull; R~Chi-2 ####
 
 # Estimation de S
 ds <- r_dist_sim(f_rweibull(n), n, a)
 
 ## Affichage des graphes des cas II et cas III ####
-# Affichage côte à côte
+# Affichage cÃ´te Ã  cÃ´te
 par(las = 1,
     mfrow = c(1, 2),
     mar = c(4, 5, 3, 2))
 
-# Affichage de lhistogramme de S et les densités de T et R sur le graphe à gauche
+# Affichage de lhistogramme de S et les densitÃ©s de T et R sur le graphe Ã  gauche
 draw_hist(ds,
           title = "Lognormal",
           seq_by = 0.125 ,
@@ -123,7 +123,7 @@ curve(dlnorm(x, meanlog = 0.5, sdlog = 0.55),
       lty = 2)
 curve(dlnorm(x, meanlog = 0.8025, sdlog = 0.55), add = TRUE)
 
-# Affichage de l'histogramme de S et les densités de T et R sur le graphe à gauche
+# Affichage de l'histogramme de S et les densitÃ©s de T et R sur le graphe Ã  gauche
 draw_hist(ds,
           title = "Weibull",
           seq_by = 0.125,
