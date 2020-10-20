@@ -1,5 +1,7 @@
 ## File  : seed_dispersal_TEST.r
 ## Title : 21.4.1 Simulating the radial distance R
+
+
 ## Constantes ####
 # Nombre d'observations
 n <- 1000000
@@ -42,12 +44,12 @@ curve(dr(x), add = TRUE)
 ## CAS II : T~lognorm; R~lognorm ####
 
 # Estimation de S
-ds <- r_dist_sim(f_rlnorm(n), n, a)
+ds_lognorm <- r_dist_sim(f_rlnorm(n), n, a)
 
 ## CAS III : T~Weibull; R~Chi-2 ####
 
 # Estimation de S
-ds <- r_dist_sim(f_rweibull(n), n, a)
+ds_rweibull <- r_dist_sim(f_rweibull(n), n, a)
 
 ## Affichage des graphes des cas II et cas III ####
 # Affichage côte à côte
@@ -56,7 +58,7 @@ par(las = 1,
     mar = c(4, 5, 3, 2))
 
 # Affichage de l'histogramme de S et les densités de T et R sur le graphe à gauche
-draw_hist(ds,
+draw_hist(ds_lognorm,
           title = "Lognormal",
           seq_by = 0.125 ,
           xlim_max = 7)
@@ -66,7 +68,7 @@ curve(dlnorm(x, meanlog = 0.5, sdlog = 0.55),
 curve(dlnorm(x, meanlog = 0.8025, sdlog = 0.55), add = TRUE)
 
 # Affichage de l'histogramme de S et les densités de T et R sur le graphe à gauche
-draw_hist(ds,
+draw_hist(ds_rweibull,
           title = "Weibull",
           seq_by = 0.125,
           xlim_max = 7)
