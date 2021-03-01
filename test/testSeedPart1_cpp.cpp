@@ -7,14 +7,11 @@ using std::exp;
  *  File  : seed_dispersal_1.r
  ** Description:Seed Dispersal
  ** Description:Simulating the radial distance R
- ** By 
- ** Fonction de simulation de densité de la distance R par méthode de rejet ####
- **  Input
- *   f : Fonction de densité
- *   n : Nombre d'observations
- *   a : Borne supérieure de f
- *   Output
- *   r : Densité estimée
+ ** By
+ ** CE FICHIER EST LA VERSION CPP DU FICHIER SEED
+ ** Son but est d'améliorer la performance du code R, qui évite
+ ** Ses avantages, il évite la redondance et permet
+ ** une compilation rapide des données.
  */
 
 
@@ -35,7 +32,7 @@ NumericVector r_dist_sim_cpp(Function f,int n, int a) {
 
 
 
-/***  Fonction Utile ***/
+/***  Fonctions Utiles ***/
 
 /** Fonction de Distribution exponentielle **/
 // [[Rcpp::export]]
@@ -63,12 +60,12 @@ NumericVector f_rweibull_cpp(int n)
 /**Fonction de Distribution Chi-2 avec 3 degrés de liberté**/
 // [[Rcpp::export]]
 NumericVector f_Chi2(NumericVector x)
-{ 
+{
   return (1 / (2 * sqrt(3.14))) * (x*x) * exp(-(x*x) / 4);
 }
 
 
-/**Les fonctions d'affichage sont codés en R en bas 
+/**Les fonctions d'affichage sont codés en R en bas
  * et les constantes aussi
  */
 
@@ -100,18 +97,6 @@ NumericVector dlnorm_cpp(NumericVector x){
 
 #quelques tests pour comparer le temps d'éxécution
 
-#n = 5
-#print("f_rexp version R")
-#f_rexp <- function(n) rexp(n = n, rate = 1 / 2)
-#print("son temps d'éxécution")
-#system.time(f_rexp(n))
-#print("celui de sa version cpp")
-#f_rexp_cpp(n)
-#system.time(f_rlnorm_cpp(n))
-
-
-
-#Fonction importante sous R
 
 r_dist_sim <- function(f, n, a) {
   du <- runif(n, min = 0, max = a)
@@ -123,15 +108,45 @@ r_dist_sim <- function(f, n, a) {
 # distribution d'une fonction exponentielle
 
 f_rweibull <- function(n) rweibull(n = n, shape = 2, scale = 2)
-
+#  Densité exponentielle
 dt <- function(x) dexp(x, rate = 1 / 2)
-
 # R = dr : Densité gamma
 dr <- function(x) dgamma(x, shape = 2, rate = 1 / 2)
-
+#  Densité d_weibull
 d_weibull <-function(x) dweibull(x, shape = 2, scale = 2)
-# S = ds : Estimation de la distance radiale
-#ds <- r_dist_sim(f_rexp(n), n, a)
+f_rexp <- function(n) rexp(n = n, rate = 1 / 2)
+
+n = 1e6
+a = 20
+# Pour n  = 1e6, comparons le temps d'éxécution des fonctions
+# f_rexp avec f_rexp_cpp, qui renvoient tous une distribution
+# suivant une loi exponentielle
+
+##### FAISONS QUELQUES COMPARAISONS ####
+
+print("le temps d'excution de la version R est de ")
+print(system.time(f_rexp(n)))
+print("Tandis que celui de la version Cpp est de ")
+print(system.time(f_rexp_cpp(n)))
+
+### Une fonction essentielle codée en cpp et qui diminue considérabelement le temps
+### est la fonction r_dist_sim_cpp
+### Comparons la, avec la version R r_dist_sim
+
+#print("la comparson entre f_rexp et f_rexp_cpp")
+#install.packages('microbenchmark')
+#library(microbenchmark)
+#microbenchmark(r_dist_sim(f_rexp(n), n, a), r_dist_sim_cpp(f_rexp_cpp, n, a))
+
+system.time(r_dist_sim(f_rexp(n), n, a))
+system.time(r_dist_sim_cpp(f_rexp_cpp, n, a))
+
+
+ds_lognorm <- r_dist_sim_cpp(f_rlnorm_cpp, n, a)
+ds_weibull <- r_dist_sim(f_rweibull(n), n, a)
+print("comparaison entre ds_lognorm qui est en cpp  et dsweibull qui est en R" )
+system.time(draw_hist(ds_lognorm,title = "Lognormal",seq_by = 0.125 ,xlim_max = 7))
+system.time(draw_hist(ds_weibull,title = "Weibull",seq_by = 0.125, xlim_max = 7))
 
 
 print("Test sur les histogrames")
@@ -141,9 +156,9 @@ a = 20
 
 # S = ds : Estimation de la distance radiale en utilisant cpp
 
-ds_exponentielle = r_dist_sim_cpp(f_rexp_cpp,n,a);
-#### PARTIE IMPLEMENTATION EN R
-## Fonction d'affichage d'histogramme
+
+
+## Fonction d'affichage d'histogramme du cas I
 draw_hist <- function(S, title, seq_by, xlim_max) {
   hist(
     S,
@@ -158,6 +173,21 @@ draw_hist <- function(S, title, seq_by, xlim_max) {
     border = "darkgrey"
   )
 }
+
+
+ds_exponentielle_cpp = r_dist_sim_cpp(f_rexp_cpp,n,a)
+ds_exponentielle_R = r_dist_sim(f_rexp(n),n,a)
+
+print("comparaison  entre l'histogramme cpp et celle de R")
+system.time(draw_hist(ds_exponentielle_cpp,
+                      title = "" ,
+                      seq_by = 0.5,
+                      xlim_max = 20))
+system.time(draw_hist(ds_exponentielle_cpp,
+                      title = "" ,
+                      seq_by = 0.5,
+                      xlim_max = 20))
+
 ## Affichage des graphes CAS I ####
 # Affichage de graphes côte à côte
 par(las = 1,
@@ -176,13 +206,15 @@ curve(
 curve(dt(x), add = TRUE)
 abline(h = 0, col = "grey")
 ## affichage de la densité estimée de S et R sur la figure droite
-draw_hist(ds_exponentielle,
+draw_hist(ds_exponentielle_cpp,
           title = "" ,
           seq_by = 0.5,
           xlim_max = 20)
 curve(dr(x), add = TRUE)
 
 ####### FIN CAS 1 ########
+
+
 
 
 
@@ -196,7 +228,13 @@ ds_lognorm <- r_dist_sim_cpp(f_rlnorm_cpp, n, a)
 ############   CAS III : T~Weibull; R~Chi-2   #############
 # Estimation de S
 
+
+
+
+#ds_weibull0 <- r_dist_sim_cpp(f_rweibull_cpp, n, a)
 ds_weibull <- r_dist_sim(f_rweibull(n), n, a)
+
+#identical(ds_weibull, ds_weibull0)
 
 ## Affichage des graphes des cas II et cas III ####
 # Affichage côte à côte
@@ -224,6 +262,17 @@ draw_hist(ds_weibull,
           xlim_max = 7)
 curve(d_weibull(x), add = TRUE, lty = 2)
 curve(f_Chi2(x), add = TRUE)
+
+
+#### testons les histogrammes avec la version cpp et non cpp
+
+#system.time(draw_hist(ds_lognorm,
+#  title = "Lognormal",
+# seq_by = 0.125 ,
+# xlim_max = 7))
+#system.time()
+
+
 
 
 

@@ -1,0 +1,23 @@
+Package: pkgPC4DS
+Title: PC4DS Project
+Version: 1.0
+Authors@R: 
+    c(person(given = "Imene",
+           family = "Kerboua",
+           role = c("aut", "cre"),
+           email = "imene.kerboua@univ-lyon2.fr"),
+      person(given = "Mouad",
+           family = "Laribia",
+           role = c("aut"),
+           email = "mouad.laribia@univ-lyon2.fr"),
+           person(given = "Dan Azoumi",
+           family = "Lawan Aboubakar",
+           role = c("aut"),
+           email = "lawan.dan-azoumi@univ-lyon2.fr"))   
+Description: This package contains solutions of parts 1, 2 and 3 of PC4DS project.
+Depends: R (>= 4.0)
+License: ULL2
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
