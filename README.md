@@ -1,7 +1,7 @@
 # PC4DS Project
 
 ## Project Intro/Objective
-This project is a R package that contains the solution of two problems Seed Dispersal and Insurance Risk:
+This project is a R package that contains the solution of two problems Seed Dispersal and Insurance Risk :
 
 * Part 1 : solve case studies chapter 21 section 21.4
 
